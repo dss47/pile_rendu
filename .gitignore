@@ -1,0 +1,7 @@
+# Binaries built locally (see LIRE.txt / README.md)
+test_expr
+test_piles
+prog
+verification
+*.o
+*.out

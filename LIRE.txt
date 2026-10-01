@@ -1,0 +1,37 @@
+COMMENT UTILISER LA BIBLIOTHEQUE (Linux)
+=========================================
+
+Contenu rendu :
+  src/test.cpp          -> petit test qui utilise expressionValide()
+  src/test_piles.cpp    -> menu interactif des piles (pas besoin de la lib)
+  src/PileTableau.h     -> pile avec tableau dynamique
+  src/PileChainee.h     -> pile avec liste chainee
+  lib/libverification.so -> la bibliotheque (equivalent Linux d'une .dll Windows)
+
+Note : src/verification.cpp est fourni comme reference du code source.
+La compilation de test.cpp ne l'utilise PAS : elle utilise uniquement
+lib/libverification.so (voir commande point 1).
+
+1) Compiler le programme de test avec la lib (depuis pile_rendu) :
+--------------------------------------------------------------------
+g++ src/test.cpp -Llib -lverification -o test_expr -Wl,-rpath,'$ORIGIN/lib'
+
+  -Llib          : dossier ou se trouve la lib (ici lib/, PAS a cote du .cpp)
+  -lverification : utilise lib/libverification.so (sans prefixe "lib", sans ".so")
+  -rpath         : memorise le chemin de la lib -> ./test_expr marche directement
+
+2) Executer :
+-------------
+./test_expr
+(affiche "Invalide" car l'expression testee "1+2)" est fausse)
+
+
+Comment la lib a ete construite (pour info, une seule fois) :
+-------------------------------------------------------------
+g++ -fPIC -shared verification.cpp -o lib/libverification.so
+(-fPIC = code relogeable, -shared = format .so partage)
+
+Verification que le binaire utilise bien la lib separee :
+----------------------------------------------------------
+ldd test_expr | grep verification
+# affiche : libverification.so => .../pile_rendu/lib/libverification.so
